@@ -44,14 +44,11 @@ public class UploadService extends IntentService {
 	
 	public void post(String url, List<Uri> uriList) {
 	    HttpClient httpClient = new DefaultHttpClient();
-	    HttpPost httpPost = new HttpPost(url);	    
 
-	    try {
-	        MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-	        
+	    try {        
 	        for (Uri imageUri : uriList) {
-				//Bitmap bm = MediaStore.Images.Media.getBitmap(
-	        		//this.getContentResolver(), imageUri);
+	        	HttpPost httpPost = new HttpPost(url);
+		        MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 	        	entity.addPart("type", new StringBody("photo"));
 				entity.addPart(imageUri.getLastPathSegment(), 
 						new FileBody(new File(imageUri.toString())));
@@ -62,6 +59,10 @@ public class UploadService extends IntentService {
 			        	HttpEntity respEntity = response.getEntity();
 			        	String responseString = EntityUtils.toString(respEntity);
 			        	// do something with the response string
+			        	
+			        	// Delete the row corresponding to the uri in the database
+			        	
+			        	// Update the clue table
 			        	return null;
 			        }
 			    });
