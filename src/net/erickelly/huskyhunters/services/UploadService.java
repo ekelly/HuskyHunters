@@ -6,15 +6,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -41,8 +44,7 @@ public class UploadService extends IntentService {
 	
 	public void post(String url, List<Uri> uriList) {
 	    HttpClient httpClient = new DefaultHttpClient();
-	    HttpContext localContext = new BasicHttpContext();
-	    HttpPost httpPost = new HttpPost(url);
+	    HttpPost httpPost = new HttpPost(url);	    
 
 	    try {
 	        MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -50,11 +52,20 @@ public class UploadService extends IntentService {
 	        for (Uri imageUri : uriList) {
 				//Bitmap bm = MediaStore.Images.Media.getBitmap(
 	        		//this.getContentResolver(), imageUri);
+	        	entity.addPart("type", new StringBody("photo"));
 				entity.addPart(imageUri.getLastPathSegment(), 
-						new FileBody(new File(imageUri.toString())));				
+						new FileBody(new File(imageUri.toString())));
+				httpPost.setEntity(entity);
+				httpClient.execute(httpPost, new ResponseHandler<Object>() {
+			        public Object handleResponse(HttpResponse response) throws 
+			        		ClientProtocolException, IOException {
+			        	HttpEntity respEntity = response.getEntity();
+			        	String responseString = EntityUtils.toString(respEntity);
+			        	// do something with the response string
+			        	return null;
+			        }
+			    });
 	        }
-	        httpPost.setEntity(entity);
-	        HttpResponse response = httpClient.execute(httpPost, localContext);
 	    } catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
