@@ -78,5 +78,8 @@ public final class DbConstants {
 		return sb.toString();
 	}
 	
+	// Clear database
+	
+	
 	
 }
