@@ -4,6 +4,6 @@
     
     <EditTextPreference android:title="@string/groupid"
         android:inputType="text" android:summary="Set the group id here"
-        android:key="groupid" android:persistent="true"></EditTextPreference>
+        android:key="@string/group_id" android:persistent="true"></EditTextPreference>
     
 </PreferenceScreen>

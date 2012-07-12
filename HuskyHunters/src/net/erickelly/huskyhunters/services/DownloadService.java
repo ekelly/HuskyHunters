@@ -1,29 +1,22 @@
 package net.erickelly.huskyhunters.services;
 
-import net.erickelly.huskyhunters.HuskyHuntersActivity.ResponseReceiver;
+import net.erickelly.huskyhunters.ClueListActivity.ResponseReceiver;
 
 import org.json.JSONArray;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
 
 /**
+ * Downloads an array of all clues
  * @author eric
- *
  */
 public class DownloadService extends IntentService {
 	
@@ -36,8 +29,7 @@ public class DownloadService extends IntentService {
 	private static String DEFAULT_HASH = "49536405";
 	private static String DEF_URL = "http://huskyhunter.roderic.us";
 	private static String DOWNLOAD_INTERVAL = "download_interval";
-	private static int DOWNLOAD_DEFAULT = 15;
-	
+	private static int DOWNLOAD_DEFAULT = 15;	
 	
 	/**
 	 * Constructor
@@ -68,6 +60,7 @@ public class DownloadService extends IntentService {
 			result = true; 
 		}
 		
+		// Let the application know that we're done downloading
 		Intent broadcastIntent = new Intent();
 		broadcastIntent.setAction(ResponseReceiver.ACTION_RESP);
 		broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -81,6 +74,7 @@ public class DownloadService extends IntentService {
 	/**
 	 * Starts the downloading again after X minutes (set in system preferences)
 	 */
+	@Deprecated
 	protected void scheduleNextUpdate() {
 		Intent intent = new Intent(this, this.getClass());
 	    PendingIntent pendingIntent =
