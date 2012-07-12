@@ -12,12 +12,14 @@ public final class DbConstants {
 	public static final int DB_VERSION = 1;
 	
 	public static final String ROWID = "_id";
+	public static final String CLUEID = "clueid";
+	
+	
 	public static final String TIME = "time";
 	
 	// server data table
-	public static final String SERVER_TABLE = "serverTable";
-	//public static final String SERVER_ROWID = "_id";
-	public static final String SERVER_CLUEID = "clueid";
+	public static final String SERVER_TABLE = "server_table";
+	public static final String DOWNLOADED_TABLE = "download_table";
 	public static final String SERVER_TEXT = "cluetext";
 	public static final String SERVER_ANS = "clueanswer";
 	public static final String SERVER_POINTS = "points";
@@ -26,14 +28,12 @@ public final class DbConstants {
 	
 	
 	// device data table
-	public static final String DEVICE_TABLE = "deviceTable";
-	//public static final String Device_ROWID = "_id";
-	public static final String DEVICE_CLUEID = "clueid";
+	public static final String DEVICE_TABLE = "device_table";
 	public static final String DEVICE_PICS_ON_DEVICE = "picsondevice";
 	
 	// photo table
-	public static final String PHOTO_TABLE = "photoTable";
-	public static final String PHOTO_PICURI = "picUri";
+	public static final String PHOTO_TABLE = "photo_table";
+	public static final String PHOTO_PICURI = "picuri";
 	public static final String PHOTO_CRTIME = "crtime";
 	
 	
@@ -42,7 +42,7 @@ public final class DbConstants {
 	// table creation strings
 	public static final String SQL_DEVICE_TABLE_CREATION =
 			"CREATE TABLE " + DEVICE_TABLE + " (" + ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ DEVICE_CLUEID + " TEXT NOT NULL UNIQUE, " + DEVICE_PICS_ON_DEVICE + " INTEGER NOT NULL);";
+			+ CLUEID + " TEXT NOT NULL UNIQUE, " + DEVICE_PICS_ON_DEVICE + " INTEGER NOT NULL);";
 	public static final String SQL_PHOTO_TABLE_CREATION = 
 			"CREATE TABLE " + PHOTO_TABLE + " (" + ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ PHOTO_PICURI + " TEXT NOT NULL, " + PHOTO_CRTIME + " INTEGER NOT NULL);";
@@ -63,7 +63,7 @@ public final class DbConstants {
 		sb.append(" (");
 		sb.append(BaseColumns._ID);
 		sb.append(" integer primary key autoincrement, ");
-		sb.append(SERVER_CLUEID);
+		sb.append(CLUEID);
 		sb.append(" text not null, ");
 		sb.append(SERVER_TEXT);
 		sb.append(" text not null, ");
@@ -78,8 +78,25 @@ public final class DbConstants {
 		return sb.toString();
 	}
 	
-	// Clear database
+	// Drop server table
+	public static String SQL_DROP_SERVER_TABLE = "DROP TABLE IF EXISTS " + SERVER_TABLE;
 	
+	// Rename downloaded table to server table
+	public static String SQL_RENAME_DOWNLOADED_TO_SERVER = "ALTER TABLE " + DOWNLOADED_TABLE
+			+ " RENAME TO " + SERVER_TABLE;
 	
+	// Clear database, drop all tables
+	public static String SQL_DROP_ALL_TABLES = SQL_DROP_SERVER_TABLE
+			+ "; DROP TABLE IF EXISTS " + DEVICE_TABLE
+			+ "; DROP TABLE IF EXISTS " + DOWNLOADED_TABLE
+			+ "; DROP TABLE IF EXISTS " + PHOTO_TABLE + ";";
 	
+	// Query command 
+	public static String SQL_SELECT = "" +
+			"SELECT ? FROM " + DbConstants.SERVER_TABLE + "LEFT JOIN " +
+			"(SELECT COUNT(" + DbConstants.CLUEID + ") AS device_pics FROM " + 
+			DbConstants.PHOTO_TABLE + " GROUP BY " + DbConstants.CLUEID + ") " +
+			"AS device_table ON " + DbConstants.CLUEID + " = " + DbConstants.CLUEID + " " +
+			"WHERE ? " +
+			"GROUP BY ?";	
 }

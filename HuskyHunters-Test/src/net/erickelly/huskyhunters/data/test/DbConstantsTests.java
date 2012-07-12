@@ -11,5 +11,10 @@ public class DbConstantsTests extends TestCase {
 		Assert.assertEquals(DbConstants.SQL_SERVER_TABLE_CREATION("test"), SqlServerTestCreationResult);
 	}
 	
+	public void testDropTableSql() {
+		String SqlDropTableResult = "DROP TABLE IF EXISTS device_table; DROP TABLE IF EXISTS server_table; DROP TABLE IF EXISTS download_table; DROP TABLE IF EXISTS photo_table;";
+		Assert.assertEquals(DbConstants.SQL_DROP_ALL_TABLES, SqlDropTableResult);
+	}
+	
 	
 }
