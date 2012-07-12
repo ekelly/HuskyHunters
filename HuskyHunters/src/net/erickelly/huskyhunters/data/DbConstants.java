@@ -79,24 +79,24 @@ public final class DbConstants {
 	}
 	
 	// Drop server table
-	public static String SQL_DROP_SERVER_TABLE = "DROP TABLE IF EXISTS " + SERVER_TABLE;
+	public static final String SQL_DROP_SERVER_TABLE = "DROP TABLE IF EXISTS " + SERVER_TABLE;
 	
 	// Rename downloaded table to server table
-	public static String SQL_RENAME_DOWNLOADED_TO_SERVER = "ALTER TABLE " + DOWNLOADED_TABLE
+	public static final String SQL_RENAME_DOWNLOADED_TO_SERVER = "ALTER TABLE " + DOWNLOADED_TABLE
 			+ " RENAME TO " + SERVER_TABLE;
 	
 	// Clear database, drop all tables
-	public static String SQL_DROP_ALL_TABLES = SQL_DROP_SERVER_TABLE
+	public static final String SQL_DROP_ALL_TABLES = SQL_DROP_SERVER_TABLE
 			+ "; DROP TABLE IF EXISTS " + DEVICE_TABLE
 			+ "; DROP TABLE IF EXISTS " + DOWNLOADED_TABLE
 			+ "; DROP TABLE IF EXISTS " + PHOTO_TABLE + ";";
 	
 	// Query command 
-	public static String SQL_SELECT = "" +
+	public static final String SQL_SELECT = "" +
 			"SELECT ? FROM " + DbConstants.SERVER_TABLE + "LEFT JOIN " +
 			"(SELECT COUNT(" + DbConstants.CLUEID + ") AS device_pics FROM " + 
 			DbConstants.PHOTO_TABLE + " GROUP BY " + DbConstants.CLUEID + ") " +
-			"AS device_table ON " + DbConstants.CLUEID + " = " + DbConstants.CLUEID + " " +
-			"WHERE ? " +
-			"GROUP BY ?";	
+			"AS device_table ON " + DbConstants.CLUEID + " = " + DbConstants.CLUEID;
+	public static final String SQL_WHERE = " WHERE ? ";
+	public static final String SQL_GROUP = " GROUP BY ?";	
 }
