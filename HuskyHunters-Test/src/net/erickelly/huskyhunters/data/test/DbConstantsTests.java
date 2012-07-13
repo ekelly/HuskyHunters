@@ -12,8 +12,13 @@ public class DbConstantsTests extends TestCase {
 	}
 	
 	public void testDropTableSql() {
-		String SqlDropTableResult = "DROP TABLE IF EXISTS device_table; DROP TABLE IF EXISTS server_table; DROP TABLE IF EXISTS download_table; DROP TABLE IF EXISTS photo_table;";
+		String SqlDropTableResult = "DROP TABLE IF EXISTS server_table; DROP TABLE IF EXISTS device_table; DROP TABLE IF EXISTS download_table; DROP TABLE IF EXISTS photo_table;";
 		Assert.assertEquals(DbConstants.SQL_DROP_ALL_TABLES, SqlDropTableResult);
+	}
+	
+	public void testSqlQueryTables() {
+		String SqlQueryTableResult = "server_table LEFT JOIN (SELECT COUNT(clueid) AS device_pics FROM photo_table GROUP BY clueid) AS device_table ON server_table.clueid = device_table.clueid";
+		Assert.assertEquals(DbConstants.SQL_QUERY_TABLES, SqlQueryTableResult);
 	}
 	
 	

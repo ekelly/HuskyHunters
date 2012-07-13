@@ -134,6 +134,10 @@ public class ClueDbProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 		SQLiteDatabase db = mDbAdapter.getReadableDatabase();
+		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+		
+		
+		
 		String query = DbConstants.SQL_SELECT;
 		if (true) {
 			

@@ -27,7 +27,8 @@ public final class DbConstants {
 	public static final String SERVER_PICS_ON_SERVER = "picsonserver";
 	
 	
-	// device data table
+	// device data table - NOT an actual table, used as virtual table for query
+	// TODO: complete taking device table out of rest of sql queries
 	public static final String DEVICE_TABLE = "device_table";
 	public static final String DEVICE_PICS_ON_DEVICE = "picsondevice";
 	
@@ -93,10 +94,17 @@ public final class DbConstants {
 	
 	// Query command 
 	public static final String SQL_SELECT = "" +
-			"SELECT ? FROM " + DbConstants.SERVER_TABLE + "LEFT JOIN " +
+			"SELECT ? FROM " + DbConstants.SERVER_TABLE + " LEFT JOIN " +
 			"(SELECT COUNT(" + DbConstants.CLUEID + ") AS device_pics FROM " + 
 			DbConstants.PHOTO_TABLE + " GROUP BY " + DbConstants.CLUEID + ") " +
 			"AS device_table ON " + DbConstants.CLUEID + " = " + DbConstants.CLUEID;
 	public static final String SQL_WHERE = " WHERE ? ";
-	public static final String SQL_GROUP = " GROUP BY ?";	
+	public static final String SQL_GROUP = " GROUP BY ?";
+	
+	// Tables portion of query
+	public static final String SQL_QUERY_TABLES = DbConstants.SERVER_TABLE + " LEFT JOIN " +
+			"(SELECT COUNT(" + DbConstants.CLUEID + ") AS device_pics FROM " + 
+			DbConstants.PHOTO_TABLE + " GROUP BY " + DbConstants.CLUEID + ") " +
+			"AS device_table ON " + DbConstants.SERVER_TABLE + "." + DbConstants.CLUEID + " = " + 
+			DbConstants.DEVICE_TABLE + "." + DbConstants.CLUEID;
 }
