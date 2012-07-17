@@ -138,11 +138,11 @@ public class ClueDbProvider extends ContentProvider {
 		
 		
 		
-		String query = DbConstants.SQL_SELECT;
+		//String query = DbConstants.SQL_SELECT;
 		if (true) {
 			
 		}
-		db.rawQuery(query, selectionArgs);
+		//db.rawQuery(query, selectionArgs);
 		
 		// TODO Auto-generated method stub
 		return null;

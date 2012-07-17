@@ -3,6 +3,8 @@ package net.erickelly.huskyhunters.data.test;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import net.erickelly.huskyhunters.data.*;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.util.Log;
 
 public class DbConstantsTests extends TestCase {
 	
@@ -19,6 +21,12 @@ public class DbConstantsTests extends TestCase {
 	public void testSqlQueryTables() {
 		String SqlQueryTableResult = "server_table LEFT JOIN (SELECT COUNT(clueid) AS device_pics FROM photo_table GROUP BY clueid) AS device_table ON server_table.clueid = device_table.clueid";
 		Assert.assertEquals(DbConstants.SQL_QUERY_TABLES, SqlQueryTableResult);
+	}
+	
+	public static void test() {
+		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+		queryBuilder.setTables(DbConstants.SQL_QUERY_TABLES);
+		Log.w("test", queryBuilder.buildQuery(DbConstants.SQL_SELECT, null, null, null, null, null, null));
 	}
 	
 	
