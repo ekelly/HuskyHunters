@@ -2,31 +2,26 @@ package net.erickelly.huskyhunters.data.test;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import net.erickelly.huskyhunters.data.*;
+import net.erickelly.huskyhunters.data.DbConstants;
 import android.database.sqlite.SQLiteQueryBuilder;
-import android.util.Log;
 
+/**
+ * A class for testing DbConstants and the SQL query strings.  Requires Android JUnit.
+ * @author francis
+ *
+ */
 public class DbConstantsTests extends TestCase {
 	
 	public void testDbServerTableCreationString() {
-		String SqlServerTestCreationResult = "CREATE TABLE test (_id integer primary key autoincrement, clueid text not null, cluetext text not null, clueanswer text not null, points integer not null, picsreqd integer not null, picsonserver integer not null);";
+		String SqlServerTestCreationResult = "CREATE TABLE test (_id integer primary key autoincrement, clueid text not null, cluetext text not null, clueanswer text not null, points integer not null, picsreqd integer not null, server_pics integer not null);";
 		Assert.assertEquals(DbConstants.SQL_SERVER_TABLE_CREATION("test"), SqlServerTestCreationResult);
 	}
 	
-	public void testDropTableSql() {
-		String SqlDropTableResult = "DROP TABLE IF EXISTS server_table; DROP TABLE IF EXISTS device_table; DROP TABLE IF EXISTS download_table; DROP TABLE IF EXISTS photo_table;";
-		Assert.assertEquals(DbConstants.SQL_DROP_ALL_TABLES, SqlDropTableResult);
-	}
-	
-	public void testSqlQueryTables() {
-		String SqlQueryTableResult = "server_table LEFT JOIN (SELECT COUNT(clueid) AS device_pics FROM photo_table GROUP BY clueid) AS device_table ON server_table.clueid = device_table.clueid";
-		Assert.assertEquals(DbConstants.SQL_QUERY_TABLES, SqlQueryTableResult);
-	}
-	
-	public static void test() {
+	public static void testSqlQuery() {
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 		queryBuilder.setTables(DbConstants.SQL_QUERY_TABLES);
-		Log.w("test", queryBuilder.buildQuery(DbConstants.SQL_SELECT, null, null, null, null, null, null));
+		String SqlQueryResult = "SELECT _id, server_table.clueid, cluetext, clueanswer, points, picsreqd, server_pics, SUM(device_pics + server_table.server_pics) as total_pics FROM server_table LEFT JOIN (SELECT clueid, COUNT(clueid) AS device_pics FROM photo_table GROUP BY clueid) AS device_table WHERE server_table.clueid = device_table.clueid GROUP BY server_table.clueid";
+		Assert.assertEquals(SqlQueryResult, queryBuilder.buildQuery(DbConstants.SQL_SELECT, null, null, null, null, null, null));
 	}
 	
 	

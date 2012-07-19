@@ -67,7 +67,6 @@ public class ClueDbProvider extends ContentProvider {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(DbConstants.SQL_SERVER_TABLE_CREATION(DbConstants.SERVER_TABLE));
-			db.execSQL(DbConstants.SQL_DEVICE_TABLE_CREATION);
 			db.execSQL(DbConstants.SQL_PHOTO_TABLE_CREATION);
 		}
 
